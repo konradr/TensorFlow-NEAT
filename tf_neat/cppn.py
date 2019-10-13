@@ -239,13 +239,13 @@ def create_cppn(genome, config, leaf_names, node_names, output_activation=None):
 def clamp_weights_(weights, weight_threshold=0.2, weight_max=3.0):
     # TODO(Cris): Find a more efficient tensor implementatation
     low_idxs = np.abs(weights) < weight_threshold
-    weights = weights.numpy() if tf.contrib.framework.is_tensor(weights) else weights
+    weights = weights.numpy() if tf.is_tensor(weights) else weights
     weights[low_idxs] = 0
     weights[weights > 0] -= weight_threshold
     weights[weights < 0] += weight_threshold
     weights[weights > weight_max] = weight_max
     weights[weights < -weight_max] = -weight_max
-    return tf.convert_to_tensor(weights)
+    return tf.convert_to_tensor(value=weights)
 
 
 def get_coord_inputs(in_coords, out_coords, batch_size=None):

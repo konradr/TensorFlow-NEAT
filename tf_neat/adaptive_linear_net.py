@@ -16,6 +16,7 @@
 
 
 import tensorflow as tf
+import numpy as np
 
 from .activations import identity_activation, tanh_activation
 from .cppn import clamp_weights_, create_cppn, get_coord_inputs
@@ -40,10 +41,10 @@ class AdaptiveLinearNet:
             self.delta_w_node = delta_w_node
 
             self.n_inputs = len(input_coords)
-            self.input_coords = tf.convert_to_tensor(input_coords, dtype=tf.float32)
+            self.input_coords = tf.convert_to_tensor(value=input_coords, dtype=tf.float32)
 
             self.n_outputs = len(output_coords)
-            self.output_coords = tf.convert_to_tensor(output_coords, dtype=tf.float32)
+            self.output_coords = tf.convert_to_tensor(value=output_coords, dtype=tf.float32)
 
             self.weight_threshold = weight_threshold
             self.weight_max = weight_max
@@ -85,7 +86,7 @@ class AdaptiveLinearNet:
             self.input_to_output = expand(self.input_to_output,
                                           multiples=(self.batch_size, self.n_outputs, self.n_inputs))
 
-            self.w_expressed = tf.not_equal(self.input_to_output, tf.constant(0.0))
+            self.w_expressed = np.where(tf.not_equal(self.input_to_output, tf.constant(0.0)))
 
             self.batched_coords = get_coord_inputs(self.input_coords, self.output_coords, batch_size=self.batch_size)
 
@@ -96,12 +97,12 @@ class AdaptiveLinearNet:
         returns: (batch_size, n_outputs)
         """
         with tf.device(self.device):
-            inputs = tf.convert_to_tensor(inputs, dtype=tf.float32)
+            inputs = tf.convert_to_tensor(value=inputs, dtype=tf.float32)
             inputs = tf.expand_dims(inputs, 2)
 
             outputs = self.activation(self.input_to_output @ inputs)
 
-            input_activs = tf.transpose(inputs, perm=[0, 2, 1])
+            input_activs = tf.transpose(a=inputs, perm=[0, 2, 1])
             input_activs = expand(input_activs, multiples=(self.batch_size, self.n_outputs, self.n_inputs))
             output_activs = expand(outputs, multiples=(self.batch_size, self.n_outputs, self.n_inputs))
 

@@ -21,7 +21,7 @@ from tf_neat.activations import identity_activation as identity
 from tf_neat.aggregations import sum_aggregation as sum_ag
 from tf_neat.cppn import Leaf, Node
 
-tf.enable_eager_execution()
+tf.compat.v1.enable_eager_execution()
 
 
 def assert_almost_equal(x, y, tol):
@@ -33,7 +33,7 @@ def test_cppn_simple():
     x = Leaf(name="x")
     y = Node([x], [1.0], 1.0, 0.0, identity, sum_ag, name="y")
     z = Node([x], [1.0], 1.0, 0.0, identity, sum_ag, name="z")
-    x_activs = tf.fill(shape, 3)
+    x_activs = tf.fill(shape, 3.0)
     x.set_activs(x_activs)
     assert np.allclose(x_activs, y.get_activs(shape).numpy())
     assert np.allclose(x_activs, z.get_activs(shape).numpy())

@@ -25,7 +25,7 @@ from tf_neat.neat_reporter import LogReporter
 from tf_neat.recurrent_net import RecurrentNet
 
 # Activate eager TensorFlow execution
-tf.enable_eager_execution()
+tf.compat.v1.enable_eager_execution()
 print("Executing eagerly: ", tf.executing_eagerly())
 
 max_env_steps = 200

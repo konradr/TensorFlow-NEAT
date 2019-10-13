@@ -53,13 +53,13 @@ class AdaptiveNet:
             # self.stateful_node = stateful_node
 
             self.n_inputs = len(input_coords)
-            self.input_coords = tf.convert_to_tensor(input_coords, preferred_dtype=tf.float32)
+            self.input_coords = tf.convert_to_tensor(value=input_coords, dtype_hint=tf.float32)
 
             self.n_hidden = len(hidden_coords)
-            self.hidden_coords = tf.convert_to_tensor(hidden_coords, preferred_dtype=tf.float32)
+            self.hidden_coords = tf.convert_to_tensor(value=hidden_coords, dtype_hint=tf.float32)
 
             self.n_outputs = len(output_coords)
-            self.output_coords = tf.convert_to_tensor(output_coords, preferred_dtype=tf.float32)
+            self.output_coords = tf.convert_to_tensor(value=output_coords, dtype_hint=tf.float32)
 
             self.weight_threshold = weight_threshold
 
@@ -109,7 +109,7 @@ class AdaptiveNet:
         returns: (batch_size, n_outputs)
         '''
         with tf.device(self.device):
-            inputs = tf.expand_dims(tf.convert_to_tensor(inputs, dtype=tf.float32), 2)
+            inputs = tf.expand_dims(tf.convert_to_tensor(value=inputs, dtype=tf.float32), 2)
             self.hidden = self.activation(self.input_to_hidden.matmul(inputs) +
                                           self.hidden_to_hidden.matmul(self.hidden) +
                                           self.bias_hidden)
@@ -117,7 +117,7 @@ class AdaptiveNet:
             outputs = self.activation(self.hidden_to_output @ self.hidden + self.bias_output)
 
             hidden_outputs = expand(self.hidden, (self.batch_size, self.n_hidden, self.n_hidden))
-            hidden_inputs = tf.transpose(hidden_outputs, perm=[0, 2, 1])
+            hidden_inputs = tf.transpose(a=hidden_outputs, perm=[0, 2, 1])
 
             (x_out, y_out), (x_in, y_in) = self.batched_hidden_coords
 

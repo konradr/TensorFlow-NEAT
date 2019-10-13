@@ -20,7 +20,7 @@ from .activations import sigmoid_activation
 
 
 def tran(tensor):
-    return tf.transpose(tensor)
+    return tf.transpose(a=tensor)
 
 
 def dense_from_coo(shape, conns, dtype=tf.float64):
@@ -28,7 +28,7 @@ def dense_from_coo(shape, conns, dtype=tf.float64):
     if len(idxs) == 0:
         return tf.zeros(shape, dtype=dtype)
     rows, cols = np.array(idxs).transpose()
-    return tf.scatter_nd(tf.stack([rows, cols], -1), tf.convert_to_tensor(weights, preferred_dtype=dtype), shape)
+    return tf.scatter_nd(tf.stack([rows, cols], -1), tf.convert_to_tensor(value=weights, dtype_hint=dtype), shape)
 
 
 # def dense_from_coo(shape, conns, dtype=tf.float64):
@@ -81,11 +81,11 @@ class RecurrentNet():
                 (n_outputs, n_outputs), output_to_output, dtype=dtype)
 
             if n_hidden > 0:
-                self.hidden_responses = tf.convert_to_tensor(hidden_responses, preferred_dtype=dtype)
-                self.hidden_biases = tf.convert_to_tensor(hidden_biases, preferred_dtype=dtype)
+                self.hidden_responses = tf.convert_to_tensor(value=hidden_responses, dtype_hint=dtype)
+                self.hidden_biases = tf.convert_to_tensor(value=hidden_biases, dtype_hint=dtype)
 
-            self.output_responses = tf.convert_to_tensor(output_responses, preferred_dtype=dtype)
-            self.output_biases = tf.convert_to_tensor(output_biases, preferred_dtype=dtype)
+            self.output_responses = tf.convert_to_tensor(value=output_responses, dtype_hint=dtype)
+            self.output_biases = tf.convert_to_tensor(value=output_biases, dtype_hint=dtype)
 
             self.reset(batch_size)
 
@@ -103,7 +103,7 @@ class RecurrentNet():
         returns: (batch_size, n_outputs)
         '''
         with tf.device(self.device):
-            inputs = tf.convert_to_tensor(inputs, preferred_dtype=self.dtype)
+            inputs = tf.convert_to_tensor(value=inputs, dtype_hint=self.dtype)
             activs_for_output = self.activs
             if self.n_hidden > 0:
                 for _ in range(self.n_internal_steps):

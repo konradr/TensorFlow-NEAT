@@ -24,7 +24,7 @@ from tf_neat.activations import tanh_activation
 from tf_neat.recurrent_net import RecurrentNet
 
 if not tf.executing_eagerly():
-    tf.enable_eager_execution()
+    tf.compat.v1.enable_eager_execution()
 
 
 def assert_almost_equal(x, y, tol):
@@ -200,7 +200,7 @@ def test_match_neat():
     # use tanh since neat sets output nodes with no inputs to 0
     # (sigmoid would output 0.5 for us)
     def neat_tanh_activation(z):
-        return float(tf.tanh(2.5 * tf.convert_to_tensor(z, dtype=tf.float64)))
+        return float(tf.tanh(2.5 * tf.convert_to_tensor(value=z, dtype=tf.float64)))
 
     for node in genome.nodes.values():
         node.response = 0.5

@@ -1,8 +1,6 @@
 neat-python==0.92
-numpy==1.14.3
+numpy==1.16.5
 gym==0.10.5
 click==6.7
-tensorflow==1.12.2
-pytest==4.0.2
-keras-applications==1.0.6
-keras-preprocessing==1.0.5
+tensorflow==2.0.0
+pytest==4.6.5

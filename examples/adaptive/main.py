@@ -29,7 +29,7 @@ from tf_neat.multi_env_eval import MultiEnvEvaluator
 from tf_neat.neat_reporter import LogReporter
 
 # Activate eager TensorFlow execution
-tf.enable_eager_execution()
+tf.compat.v1.enable_eager_execution()
 print("Executing eagerly: ", tf.executing_eagerly())
 
 batch_size = 4
